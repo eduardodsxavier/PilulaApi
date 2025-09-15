@@ -18,9 +18,11 @@ public class Medicamento {
     @Id
     private Long id;
 
+    /*
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+    */
 
     @Column(nullable = false)
     private String nome;
@@ -45,9 +47,9 @@ public class Medicamento {
 
     public Medicamento() {}
 
-    public Medicamento(Long id, Usuario usuario, String nome, String dosagem, Administracao administracao, String frequencia, Date inicio, Date termino, boolean continuo, String observacoes) {
+    public Medicamento(Long id, String nome, String dosagem, Administracao administracao, String frequencia, Date inicio, Date termino, boolean continuo, String observacoes) {
         this.id = id;
-        this.usuario = usuario;
+        //this.usuario = usuario;
         this.nome = nome;
         this.dosagem = dosagem;
         this.administracao = administracao;
@@ -58,7 +60,7 @@ public class Medicamento {
         this.observacoes = observacoes;
     }
 
-    public Long getId() {
+    public Long id() {
         return id;
     }
     
@@ -66,15 +68,17 @@ public class Medicamento {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
+    /*
+    public Usuario usuario() {
         return usuario;
     }
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+    */
 
-    public String getNome() {
+    public String nome() {
         return nome;
     }
 
@@ -82,7 +86,7 @@ public class Medicamento {
         this.nome = nome;
     }
 
-    public String getDosagem() {
+    public String dosagem() {
         return dosagem;
     }
 
@@ -90,7 +94,7 @@ public class Medicamento {
         this.dosagem = dosagem;
     }
 
-    public Administracao getAdministracao() {
+    public Administracao administracao() {
         return administracao;
     }
 
@@ -98,7 +102,7 @@ public class Medicamento {
         this.administracao = administracao;
     }
 
-    public String getFrequencia() {
+    public String frequencia() {
         return frequencia;
     }
 
@@ -106,7 +110,7 @@ public class Medicamento {
         this.frequencia = frequencia;
     }
 
-    public Date getInicio() {
+    public Date inicio() {
         return inicio;
     }
 
@@ -114,7 +118,7 @@ public class Medicamento {
         this.inicio = inicio;
     }
 
-    public Date getTermino() {
+    public Date termino() {
         return termino;
     }
 
@@ -122,7 +126,7 @@ public class Medicamento {
         this.termino = termino;
     }
 
-    public boolean getContinuo() {
+    public boolean continuo() {
         return continuo;
     }
 
@@ -130,7 +134,7 @@ public class Medicamento {
         this.continuo = continuo;
     }
 
-    public String getObservacoes() {
+    public String observacoes() {
         return observacoes;
     }
 

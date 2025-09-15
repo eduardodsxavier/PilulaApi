@@ -36,7 +36,7 @@ public class Dose {
         this.status = status;
     }
 
-    public Long getId() {
+    public Long id() {
         return id;
     }
 
@@ -44,7 +44,7 @@ public class Dose {
         this.id = id;
     }
 
-    public Medicamento getMedicamento() {
+    public Medicamento medicamento() {
         return medicamento;
     }
 
@@ -52,7 +52,7 @@ public class Dose {
         this.medicamento = medicamento;
     }
 
-    public Time getHoraPrevista() {
+    public Time horaPrevista() {
         return horaPrevista;
     }
 
@@ -60,7 +60,7 @@ public class Dose {
         this.horaPrevista = horaPrevista;
     }
 
-    public Status getStatus() {
+    public Status status() {
         return status;
     }
 

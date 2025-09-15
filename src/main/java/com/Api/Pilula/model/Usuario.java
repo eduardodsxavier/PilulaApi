@@ -30,7 +30,7 @@ public class Usuario {
         this.password = password;
     }
 
-    public String getCpf() {
+    public String cpf() {
         return cpf;
     }
     
@@ -38,7 +38,7 @@ public class Usuario {
         this.cpf = cpf;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
     
@@ -46,7 +46,7 @@ public class Usuario {
         this.name = name;
     }
 
-    public String getEmail() {
+    public String email() {
         return email;
     }
 
@@ -54,7 +54,7 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getPassword() {
+    public String password() {
         return password;
     }
 
