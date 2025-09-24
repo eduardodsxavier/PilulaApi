@@ -15,46 +15,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Api.Pilula.model.Medicamento;
-import com.Api.Pilula.service.MedicamentoService;
+import com.Api.Pilula.model.Dose;
+import com.Api.Pilula.service.DoseService;
 
-@RequestMapping("/medicamentos")
+@RequestMapping("/doses")
 @RestController
-public class MedicamentoController {
+public class DoseController {
 
     @Autowired
-    private MedicamentoService service;
+    private DoseService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Medicamento addMedicamento(Medicamento medicamento) {
-        return service.save(medicamento);
+    public Dose addDose(Dose dose) {
+        return service.save(dose);
     }
     
     @GetMapping
-    public List<Medicamento> getAllMecicamentos() {
+    public List<Dose> getAllDoses() {
         return service.getAll();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Medicamento> getMecicamentoById(@PathVariable("id") Long id) {
+    public ResponseEntity<Dose> getDosesById(@PathVariable("id") Long id) {
         return service.getById(id)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/usuario/{id}")
-    public List<Medicamento> getMecicamentoByUsuario(@PathVariable("id") String usuarioCpf) {
-        return service.getByUsuarioCpf(usuarioCpf);
+    @GetMapping("/medicamentos/{id}")
+    public List<Dose> getDosesByMedicamentoId(@PathVariable("id") Long medicamentoId) {
+        return service.getByMedicamentoId(medicamentoId);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Medicamento> updateMedicamento(@PathVariable("id") Long id, @RequestBody Medicamento medicamento) {
-        return new ResponseEntity<Medicamento>(service.update(id, medicamento),HttpStatus.OK);
+    public ResponseEntity<Dose> updateDose(@PathVariable("id") Long id, @RequestBody Dose dose) {
+        return new ResponseEntity<Dose>(service.update(id, dose),HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteMedicamento(@PathVariable("id") Long id) {
-        return new ResponseEntity<String>("medicamento deleted successfully!", HttpStatus.OK);
+    public ResponseEntity<String> deleteDose(@PathVariable("id") Long id) {
+        return new ResponseEntity<String>("Dose deleted successfully!", HttpStatus.OK);
     }
 }

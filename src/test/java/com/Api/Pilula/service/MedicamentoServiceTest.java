@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import com.Api.Pilula.model.Medicamento;
+import com.Api.Pilula.model.Usuario;
 import com.Api.Pilula.enums.Administracao;
 
 import java.sql.Date;
@@ -24,7 +25,7 @@ public class MedicamentoServiceTest {
     @Order(1)
     @Rollback(value = false)
     public void saveMedicamentoTest(){
-        Medicamento medicamento = new Medicamento(1L, "dipirona", "2mg", Administracao.Injecao, "3x", Date.valueOf("2025-05-10"), Date.valueOf("2025-06-10"), true, "none");
+        Medicamento medicamento = new Medicamento(1L, new Usuario(), "dipirona", "2mg", Administracao.Injecao, "3x", Date.valueOf("2025-05-10"), Date.valueOf("2025-06-10"), true, "none");
         service.save(medicamento);
 
         System.out.println(medicamento);

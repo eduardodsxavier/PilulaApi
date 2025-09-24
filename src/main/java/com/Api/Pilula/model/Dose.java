@@ -4,22 +4,25 @@ import com.Api.Pilula.enums.Status;
 
 import java.sql.Time;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-@Table 
+@Table(name = "dose") 
 @Entity
 public class Dose {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "medicamento_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Medicamento medicamento;
     
     @Column(unique = true, nullable = false)
@@ -30,8 +33,9 @@ public class Dose {
 
     public Dose() {}
  
-    public Dose(Long id, Time horaPrevista, Status status) {
+    public Dose(Long id, Medicamento medicamento, Time horaPrevista, Status status) {
         this.id = id;
+        this.medicamento = medicamento;
         this.horaPrevista = horaPrevista; 
         this.status = status;
     }

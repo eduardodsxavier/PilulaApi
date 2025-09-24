@@ -27,6 +27,10 @@ public class MedicamentoService {
         return repository.findById(id);
     }
 
+    public List<Medicamento> getByUsuarioCpf(String usuarioCpf) {
+        return repository.findByUsuarioCpf(usuarioCpf);
+    }
+
     public Medicamento update(Long id, Medicamento newInfo) {
         Medicamento medicamento = repository.findById(id).orElseThrow();
 
