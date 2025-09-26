@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.Api.Pilula.model.Usuario;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findById(Long id);
+public interface UsuarioRepository extends JpaRepository<Usuario, String> {
+    Optional<Usuario> findByCpf(String cpf);
 
     Optional<Usuario> findByName(String name);
 

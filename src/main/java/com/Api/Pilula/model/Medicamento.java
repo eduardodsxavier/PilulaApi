@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -32,6 +34,7 @@ public class Medicamento {
     private String dosagem;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Administracao administracao;
     
     @Column(nullable = false)
