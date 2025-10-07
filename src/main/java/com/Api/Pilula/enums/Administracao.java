@@ -1,7 +1,7 @@
 package com.Api.Pilula.enums;
 
-public enum Administracao{
-    injecao,
+public enum Administracao {
+    Injecao,
     xarope,
     comprimido,
     gotas,

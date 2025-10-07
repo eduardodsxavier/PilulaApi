@@ -1,4 +1,14 @@
 services:
+  api_backend:
+    build: .
+    container_name: back-api
+    depends_on:
+      - postgresql
+    ports:
+      - "8080:8080"
+    command: mvn spring-boot:run
+    volumes:
+      - .:/app
   postgresql:
     container_name: 'pilula-db'
     image: postgres:16
