@@ -11,6 +11,7 @@ import com.Api.Pilula.dtos.RegistroUsuarioDto;
 import com.Api.Pilula.model.Usuario;
 import com.Api.Pilula.repository.UsuarioRepository;
 import com.Api.Pilula.security.UserDetailsImpl;
+import com.Api.Pilula.security.SecurityConfig;
 
 import org.springframework.security.core.Authentication;
 
@@ -26,12 +27,24 @@ public class AuthService {
     @Autowired
     private AuthenticationManager manager;
 
+    @Autowired
+    private SecurityConfig securityConfig;
+
+
     public AccessTokenDto register(RegistroUsuarioDto usuarioInfo) {
-        Usuario usuario = new Usuario(usuarioInfo.cpf().trim(), usuarioInfo.nome().trim(), usuarioInfo.email().trim(), usuarioInfo.senha().trim());
+        Usuario usuario = new Usuario(
+                usuarioInfo.cpf().trim(), 
+                usuarioInfo.nome().trim(), 
+                usuarioInfo.email().trim(), 
+                securityConfig.passwordEncoder().encode(usuarioInfo.senha().trim()));
 
         repository.save(usuario);
 
-        return authenticate(new LoginUsuarioDto(usuario.cpf(), usuario.senha()));
+        UserDetailsImpl userDetails = new UserDetailsImpl(usuario);
+
+        String accessToken = jwtService.generateToken(userDetails);
+
+        return new AccessTokenDto(accessToken);
     }
 
     public AccessTokenDto authenticate(LoginUsuarioDto usuarioInfo) {
