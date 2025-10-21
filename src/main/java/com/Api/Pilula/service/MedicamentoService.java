@@ -12,9 +12,9 @@ import com.Api.Pilula.model.Medicamento;
 @Service
 public class MedicamentoService {
 
-    @Autowired 
+    @Autowired
     private MedicamentoRepository repository;
-    
+
     public Medicamento save(Medicamento medicamento) {
         return repository.save(medicamento);
     }
@@ -22,7 +22,7 @@ public class MedicamentoService {
     public List<Medicamento> getAll() {
         return repository.findAll();
     }
-     
+
     public Optional<Medicamento> getById(Long id) {
         return repository.findById(id);
     }

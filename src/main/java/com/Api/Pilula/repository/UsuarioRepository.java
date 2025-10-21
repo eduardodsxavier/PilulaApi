@@ -11,7 +11,7 @@ import com.Api.Pilula.model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     Optional<Usuario> findByCpf(String cpf);
 
-    Optional<Usuario> findByName(String name);
+    Optional<Usuario> findByNome(String nome);
 
     Optional<Usuario> findByEmail(String email);
 }

@@ -36,7 +36,7 @@ public class Medicamento {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Administracao administracao;
-    
+
     @Column(nullable = false)
     private String frequencia;
 
@@ -49,9 +49,11 @@ public class Medicamento {
 
     private String observacoes;
 
-    public Medicamento() {}
+    public Medicamento() {
+    }
 
-    public Medicamento(Long id, Usuario usuario, String nome, String dosagem, Administracao administracao, String frequencia, Date inicio, Date termino, boolean continuo, String observacoes) {
+    public Medicamento(Long id, Usuario usuario, String nome, String dosagem, Administracao administracao,
+            String frequencia, Date inicio, Date termino, boolean continuo, String observacoes) {
         this.id = id;
         this.usuario = usuario;
         this.nome = nome;
@@ -67,7 +69,7 @@ public class Medicamento {
     public Long id() {
         return id;
     }
-    
+
     public void setId(Long id) {
         this.id = id;
     }

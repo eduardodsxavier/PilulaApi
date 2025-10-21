@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
-@Table(name = "dose") 
+@Table(name = "dose")
 @Entity
 public class Dose {
 
@@ -26,7 +26,7 @@ public class Dose {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Medicamento medicamento;
-    
+
     @Column(unique = true, nullable = false)
     private Time horaPrevista;
 
@@ -34,12 +34,13 @@ public class Dose {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Dose() {}
- 
+    public Dose() {
+    }
+
     public Dose(Long id, Medicamento medicamento, Time horaPrevista, Status status) {
         this.id = id;
         this.medicamento = medicamento;
-        this.horaPrevista = horaPrevista; 
+        this.horaPrevista = horaPrevista;
         this.status = status;
     }
 

@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Table(name = "usuario") 
+@Table(name = "usuario")
 @Entity
 public class Usuario {
 
@@ -13,37 +13,38 @@ public class Usuario {
     private String cpf;
 
     @Column(unique = true, nullable = false)
-    private String name;
-    
+    private String nome;
+
     @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
-    private String password;
+    private String senha;
 
-    public Usuario() {}
- 
-    public Usuario(String cpf, String name, String email, String password) {
+    public Usuario() {
+    }
+
+    public Usuario(String cpf, String nome, String email, String senha) {
         this.cpf = cpf;
-        this.name = name; 
+        this.nome = nome;
         this.email = email;
-        this.password = password;
+        this.senha = senha;
     }
 
     public String cpf() {
         return cpf;
     }
-    
+
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
-    public String name() {
-        return name;
+    public String nome() {
+        return nome;
     }
-    
-    public void setName(String name) {
-        this.name = name;
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String email() {
@@ -54,11 +55,11 @@ public class Usuario {
         this.email = email;
     }
 
-    public String password() {
-        return password;
+    public String senha() {
+        return senha;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

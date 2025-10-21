@@ -30,7 +30,7 @@ public class MedicamentoController {
     public Medicamento addMedicamento(Medicamento medicamento) {
         return service.save(medicamento);
     }
-    
+
     @GetMapping
     public List<Medicamento> getAllMecicamentos() {
         return service.getAll();
@@ -39,8 +39,8 @@ public class MedicamentoController {
     @GetMapping("{id}")
     public ResponseEntity<Medicamento> getMecicamentoById(@PathVariable("id") Long id) {
         return service.getById(id)
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/usuario/{id}")
@@ -49,8 +49,9 @@ public class MedicamentoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Medicamento> updateMedicamento(@PathVariable("id") Long id, @RequestBody Medicamento medicamento) {
-        return new ResponseEntity<Medicamento>(service.update(id, medicamento),HttpStatus.OK);
+    public ResponseEntity<Medicamento> updateMedicamento(@PathVariable("id") Long id,
+            @RequestBody Medicamento medicamento) {
+        return new ResponseEntity<Medicamento>(service.update(id, medicamento), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

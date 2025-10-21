@@ -1,6 +1,6 @@
 package com.Api.Pilula.enums;
 
-public enum Status{
+public enum Status {
     PRESCRITO,
     ADMINISTRADO,
     ATRASADO
