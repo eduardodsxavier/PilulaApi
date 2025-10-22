@@ -31,12 +31,6 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Usuario> addUsuario(@RequestBody Usuario usuario) {
-        Usuario novoUsuario = service.save(usuario);
-        return ResponseEntity.status(201).body(novoUsuario);
-    }
-
     @PutMapping("/{cpf}")
     public ResponseEntity<Usuario> updateUsuario(@PathVariable String cpf, @RequestBody Usuario usuarioAtualizado) {
         Usuario usuario = service.update(cpf, usuarioAtualizado);

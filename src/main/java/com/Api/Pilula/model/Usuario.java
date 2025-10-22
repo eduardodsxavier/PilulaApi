@@ -12,7 +12,7 @@ public class Usuario {
     @Id
     private String cpf;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String nome;
 
     @Column(unique = true, nullable = false)
