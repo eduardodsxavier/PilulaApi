@@ -32,6 +32,14 @@ public class AuthService {
 
 
     public AccessTokenDto register(RegistroUsuarioDto usuarioInfo) {
+        if(!new Usuario().validarSenha(usuarioInfo.senha())) {
+            throw new RuntimeException();
+        }
+
+        if (!usuarioInfo.senha().equals(usuarioInfo.confirmarSenha())) {
+            throw new RuntimeException();
+        }
+
         Usuario usuario = new Usuario(
                 usuarioInfo.cpf().trim(), 
                 usuarioInfo.nome().trim(), 

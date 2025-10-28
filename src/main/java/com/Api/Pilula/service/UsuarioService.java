@@ -30,6 +30,11 @@ public class UsuarioService {
 
     public Usuario update(String cpf, Usuario usuarioAtualizado) {
         Optional<Usuario> usuarioExistente = repository.findById(cpf);
+
+        if(!new Usuario().validarSenha(usuarioAtualizado.senha())) {
+            throw new RuntimeException();
+        }
+
         if (usuarioExistente.isPresent()) {
             Usuario usuario = usuarioExistente.get();
             usuario.setEmail(usuarioAtualizado.email().trim());

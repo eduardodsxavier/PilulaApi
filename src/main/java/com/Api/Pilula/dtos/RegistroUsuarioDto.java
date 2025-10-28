@@ -4,5 +4,6 @@ public record RegistroUsuarioDto(
     String cpf,
     String nome,
     String email,
-    String senha
+    String senha,
+    String confirmarSenha
 ) {}

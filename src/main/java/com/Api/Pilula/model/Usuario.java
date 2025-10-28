@@ -62,4 +62,8 @@ public class Usuario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+    public boolean validarSenha(String senha) {
+        return senha.matches("^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{8,}$");
+    }
 }
