@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.Api.Pilula.dtos.UsuarioInfoDto;
 import com.Api.Pilula.model.Usuario;
 import com.Api.Pilula.service.UsuarioService;
 
@@ -17,13 +18,13 @@ public class UsuarioController {
     private UsuarioService service;
 
     @GetMapping
-    public List<Usuario> getAllUsuarios() {
+    public List<UsuarioInfoDto> getAllUsuarios() {
         return service.getAll();
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<Usuario> getUsuarioByCpf(@PathVariable String cpf) {
-        Usuario usuario = service.getByCpf(cpf);
+    public ResponseEntity<UsuarioInfoDto> getUsuarioByCpf(@PathVariable String cpf) {
+        UsuarioInfoDto usuario = service.getByCpf(cpf);
         if (usuario != null) {
             return ResponseEntity.ok(usuario);
         } else {
@@ -32,8 +33,8 @@ public class UsuarioController {
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable String cpf, @RequestBody Usuario usuarioAtualizado) {
-        Usuario usuario = service.update(cpf, usuarioAtualizado);
+    public ResponseEntity<UsuarioInfoDto> updateUsuario(@PathVariable String cpf, @RequestBody Usuario usuarioAtualizado) {
+        UsuarioInfoDto usuario = service.update(cpf, usuarioAtualizado);
         if (usuario != null) {
             return ResponseEntity.ok(usuario);
         } else {

@@ -1,11 +1,13 @@
 package com.Api.Pilula.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.Api.Pilula.dtos.UsuarioInfoDto;
 import com.Api.Pilula.model.Usuario;
 import com.Api.Pilula.repository.UsuarioRepository;
 import com.Api.Pilula.security.SecurityConfig;
@@ -19,16 +21,18 @@ public class UsuarioService {
     @Autowired
     private SecurityConfig securityConfig;
 
-    public List<Usuario> getAll() {
-        return repository.findAll();
+    public List<UsuarioInfoDto> getAll() {
+        List<UsuarioInfoDto> usuarios = new ArrayList<>(); 
+        repository.findAll().stream().forEach(usuario -> usuarios.add(new UsuarioInfoDto(usuario.cpf(), usuario.cpf(), usuario.email()))); 
+        return usuarios;
     }
 
-    public Usuario getByCpf(String cpf) {
-        Optional<Usuario> usuario = repository.findById(cpf);
-        return usuario.orElse(null);
+    public UsuarioInfoDto getByCpf(String cpf) {
+        Usuario usuario = repository.findById(cpf).get();
+        return new UsuarioInfoDto(usuario.cpf(), usuario.nome(), usuario.email());
     }
 
-    public Usuario update(String cpf, Usuario usuarioAtualizado) {
+    public UsuarioInfoDto update(String cpf, Usuario usuarioAtualizado) {
         Optional<Usuario> usuarioExistente = repository.findById(cpf);
 
         if(!new Usuario().validarSenha(usuarioAtualizado.senha())) {
@@ -39,7 +43,8 @@ public class UsuarioService {
             Usuario usuario = usuarioExistente.get();
             usuario.setEmail(usuarioAtualizado.email().trim());
             usuario.setSenha(securityConfig.passwordEncoder().encode(usuarioAtualizado.senha().trim()));
-            return repository.save(usuario);
+            repository.save(usuario);
+            return new UsuarioInfoDto(usuario.cpf(), usuario.nome(), usuario.email());
         }
         return null;
     }
