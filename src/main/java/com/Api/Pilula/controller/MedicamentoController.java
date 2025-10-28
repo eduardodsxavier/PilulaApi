@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Api.Pilula.dtos.MedicamentoInfoDto;
 import com.Api.Pilula.model.Medicamento;
 import com.Api.Pilula.service.MedicamentoService;
 
@@ -27,8 +28,8 @@ public class MedicamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Medicamento addMedicamento(Medicamento medicamento) {
-        return service.save(medicamento);
+    public MedicamentoInfoDto addMedicamento(@RequestBody MedicamentoInfoDto medicamentoInfo) {
+        return service.save(medicamentoInfo);
     }
 
     @GetMapping

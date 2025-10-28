@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import com.Api.Pilula.model.Medicamento;
-import com.Api.Pilula.model.Usuario;
+import com.Api.Pilula.dtos.MedicamentoInfoDto;
 import com.Api.Pilula.enums.Administracao;
 
 import java.sql.Date;
@@ -25,11 +25,10 @@ public class MedicamentoServiceTest {
     @Order(1)
     @Rollback(value = false)
     public void saveMedicamentoTest(){
-        Medicamento medicamento = new Medicamento(1L, new Usuario(), "dipirona", "2mg", Administracao.Injecao, "3x", Date.valueOf("2025-05-10"), Date.valueOf("2025-06-10"), true, "none");
+        MedicamentoInfoDto medicamento = new MedicamentoInfoDto("12345", "dipirona", "2mg", Administracao.injecao, "3x", Date.valueOf("2025-05-10"), Date.valueOf("2025-06-10"), true, "none");
         service.save(medicamento);
 
-        System.out.println(medicamento);
-        Assertions.assertThat(medicamento.id()).isGreaterThan(0);
+        Assertions.assertThat(medicamento.cpfUsuario()).isEqualTo("12345");
     }
 
     @Test
@@ -62,7 +61,7 @@ public class MedicamentoServiceTest {
         Medicamento medicamento = service.getById(1L).get();
         medicamento.setDosagem("3mg");
         medicamento.setFrequencia("4x");
-        Medicamento medicamentoUpdated = service.save(medicamento);
+        Medicamento medicamentoUpdated = service.update(1L, medicamento);
 
         System.out.println(medicamentoUpdated);
         Assertions.assertThat(medicamento.frequencia()).isEqualTo("4x");

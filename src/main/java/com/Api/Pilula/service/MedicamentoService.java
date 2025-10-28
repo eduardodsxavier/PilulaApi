@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Api.Pilula.repository.MedicamentoRepository;
+import com.Api.Pilula.repository.UsuarioRepository;
+import com.Api.Pilula.dtos.MedicamentoInfoDto;
 import com.Api.Pilula.model.Medicamento;
+import com.Api.Pilula.model.Usuario;
 
 @Service
 public class MedicamentoService {
@@ -15,8 +18,33 @@ public class MedicamentoService {
     @Autowired
     private MedicamentoRepository repository;
 
-    public Medicamento save(Medicamento medicamento) {
-        return repository.save(medicamento);
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    public MedicamentoInfoDto save(MedicamentoInfoDto medicamentoInfo) {
+        Usuario usuario = usuarioRepository.findByCpf(medicamentoInfo.cpfUsuario()).get(); 
+
+        Medicamento medicamento = new Medicamento();
+        medicamento.setUsuario(usuario);
+        medicamento.setNome(medicamentoInfo.nome());
+        medicamento.setDosagem(medicamentoInfo.dosagem());
+        medicamento.setAdministracao(medicamentoInfo.administracao());
+        medicamento.setFrequencia(medicamentoInfo.frequencia());
+        medicamento.setInicio(medicamentoInfo.inicio());
+
+        if (medicamentoInfo.termino() != null) {
+            medicamento.setTermino(medicamentoInfo.termino());
+        }
+        if (medicamentoInfo.continuo() != null) {
+            medicamento.setContinuo(medicamentoInfo.continuo());
+        }
+        if (medicamentoInfo.observacoes() != null) {
+            medicamento.setObservacoes(medicamentoInfo.observacoes());
+        }
+
+        repository.save(medicamento);
+
+        return medicamentoInfo;
     }
 
     public List<Medicamento> getAll() {
