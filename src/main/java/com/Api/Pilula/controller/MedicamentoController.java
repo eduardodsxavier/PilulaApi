@@ -33,30 +33,29 @@ public class MedicamentoController {
     }
 
     @GetMapping
-    public List<Medicamento> getAllMecicamentos() {
+    public List<MedicamentoInfoDto> getAllMecicamentos() {
         return service.getAll();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Medicamento> getMecicamentoById(@PathVariable("id") Long id) {
-        return service.getById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<MedicamentoInfoDto> getMecicamentoById(@PathVariable("id") Long id) {
+        return new ResponseEntity<MedicamentoInfoDto>(service.getById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/usuario/{id}")
-    public List<Medicamento> getMecicamentoByUsuario(@PathVariable("id") String usuarioCpf) {
+    @GetMapping("/usuario/{cpf}")
+    public List<MedicamentoInfoDto> getMecicamentoByUsuario(@PathVariable("cpf") String usuarioCpf) {
         return service.getByUsuarioCpf(usuarioCpf);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Medicamento> updateMedicamento(@PathVariable("id") Long id,
-            @RequestBody Medicamento medicamento) {
-        return new ResponseEntity<Medicamento>(service.update(id, medicamento), HttpStatus.OK);
+    public ResponseEntity<MedicamentoInfoDto> updateMedicamento(@PathVariable("id") Long id,
+            @RequestBody MedicamentoInfoDto medicamentoInfo) {
+        return new ResponseEntity<MedicamentoInfoDto>(service.update(id, medicamentoInfo), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteMedicamento(@PathVariable("id") Long id) {
+        service.delete(id);
         return new ResponseEntity<String>("medicamento deleted successfully!", HttpStatus.OK);
     }
 }

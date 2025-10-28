@@ -1,7 +1,7 @@
 package com.Api.Pilula.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,47 +31,88 @@ public class MedicamentoService {
         medicamento.setAdministracao(medicamentoInfo.administracao());
         medicamento.setFrequencia(medicamentoInfo.frequencia());
         medicamento.setInicio(medicamentoInfo.inicio());
-
-        if (medicamentoInfo.termino() != null) {
-            medicamento.setTermino(medicamentoInfo.termino());
-        }
-        if (medicamentoInfo.continuo() != null) {
-            medicamento.setContinuo(medicamentoInfo.continuo());
-        }
-        if (medicamentoInfo.observacoes() != null) {
-            medicamento.setObservacoes(medicamentoInfo.observacoes());
-        }
+        medicamento.setTermino(medicamentoInfo.termino());
+        medicamento.setContinuo(medicamentoInfo.continuo());
+        medicamento.setObservacoes(medicamentoInfo.observacoes());
 
         repository.save(medicamento);
 
         return medicamentoInfo;
     }
 
-    public List<Medicamento> getAll() {
-        return repository.findAll();
+    public List<MedicamentoInfoDto> getAll() {
+        List<MedicamentoInfoDto> medicamentos = new ArrayList<>(); 
+        repository.findAll().stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
+                        null,
+                        null, 
+                        medicamento.nome(), 
+                        medicamento.dosagem(), 
+                        medicamento.administracao(), 
+                        medicamento.frequencia(), 
+                        medicamento.inicio(), 
+                        medicamento.termino(), 
+                        medicamento.continuo(), 
+                        medicamento.observacoes()))); 
+        return medicamentos;
     }
 
-    public Optional<Medicamento> getById(Long id) {
-        return repository.findById(id);
+    public MedicamentoInfoDto getById(Long id) {
+        Medicamento medicamento = repository.findById(id).get();
+
+        return new MedicamentoInfoDto(
+                        null,
+                        null, 
+                        medicamento.nome(), 
+                        medicamento.dosagem(), 
+                        medicamento.administracao(), 
+                        medicamento.frequencia(), 
+                        medicamento.inicio(), 
+                        medicamento.termino(), 
+                        medicamento.continuo(), 
+                        medicamento.observacoes()); 
     }
 
-    public List<Medicamento> getByUsuarioCpf(String usuarioCpf) {
-        return repository.findByUsuarioCpf(usuarioCpf);
+    public List<MedicamentoInfoDto> getByUsuarioCpf(String usuarioCpf) {
+        List<MedicamentoInfoDto> medicamentos = new ArrayList<>(); 
+        repository.findByUsuarioCpf(usuarioCpf).stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
+                        null,
+                        null, 
+                        medicamento.nome(), 
+                        medicamento.dosagem(), 
+                        medicamento.administracao(), 
+                        medicamento.frequencia(), 
+                        medicamento.inicio(), 
+                        medicamento.termino(), 
+                        medicamento.continuo(), 
+                        medicamento.observacoes()))); 
+        return medicamentos;
     }
 
-    public Medicamento update(Long id, Medicamento newInfo) {
+    public MedicamentoInfoDto update(Long id, MedicamentoInfoDto medicamentoInfo) {
         Medicamento medicamento = repository.findById(id).orElseThrow();
 
-        medicamento.setNome(newInfo.nome());
-        medicamento.setDosagem(newInfo.dosagem());
-        medicamento.setAdministracao(newInfo.administracao());
-        medicamento.setFrequencia(newInfo.frequencia());
-        medicamento.setInicio(newInfo.inicio());
-        medicamento.setTermino(newInfo.termino());
-        medicamento.setContinuo(newInfo.continuo());
-        medicamento.setObservacoes(newInfo.observacoes());
+        medicamento.setNome(medicamentoInfo.nome());
+        medicamento.setDosagem(medicamentoInfo.dosagem());
+        medicamento.setAdministracao(medicamentoInfo.administracao());
+        medicamento.setFrequencia(medicamentoInfo.frequencia());
+        medicamento.setInicio(medicamentoInfo.inicio());
+        medicamento.setTermino(medicamentoInfo.termino());
+        medicamento.setContinuo(medicamentoInfo.continuo());
+        medicamento.setObservacoes(medicamentoInfo.observacoes());
 
-        return repository.save(medicamento);
+        repository.save(medicamento);
+
+        return new MedicamentoInfoDto(
+                        null, 
+                        null, 
+                        medicamento.nome(), 
+                        medicamento.dosagem(), 
+                        medicamento.administracao(), 
+                        medicamento.frequencia(), 
+                        medicamento.inicio(), 
+                        medicamento.termino(), 
+                        medicamento.continuo(), 
+                        medicamento.observacoes()); 
     }
 
     public void delete(Long id) {

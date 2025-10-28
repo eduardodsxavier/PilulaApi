@@ -45,6 +45,7 @@ public class Medicamento {
 
     private Date termino;
 
+    @Column(nullable = false)
     private boolean continuo;
 
     private String observacoes;
