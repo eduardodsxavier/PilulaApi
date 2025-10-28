@@ -35,14 +35,21 @@ public class UsuarioService {
     public UsuarioInfoDto update(String cpf, Usuario usuarioAtualizado) {
         Optional<Usuario> usuarioExistente = repository.findById(cpf);
 
-        if(!new Usuario().validarSenha(usuarioAtualizado.senha())) {
+        if(usuarioAtualizado.senha() != null && !new Usuario().validarSenha(usuarioAtualizado.senha())) {
             throw new RuntimeException();
         }
 
         if (usuarioExistente.isPresent()) {
             Usuario usuario = usuarioExistente.get();
-            usuario.setEmail(usuarioAtualizado.email().trim());
-            usuario.setSenha(securityConfig.passwordEncoder().encode(usuarioAtualizado.senha().trim()));
+            if (usuarioAtualizado.nome() != null) {
+                usuario.setNome(usuarioAtualizado.nome().trim());
+            }
+            if (usuarioAtualizado.email() != null) {
+                usuario.setEmail(usuarioAtualizado.email().trim());
+            }
+            if (usuarioAtualizado.senha() != null) {
+                usuario.setSenha(securityConfig.passwordEncoder().encode(usuarioAtualizado.senha().trim()));
+            }
             repository.save(usuario);
             return new UsuarioInfoDto(usuario.cpf(), usuario.nome(), usuario.email());
         }
