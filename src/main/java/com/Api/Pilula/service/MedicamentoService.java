@@ -43,8 +43,8 @@ public class MedicamentoService {
     public List<MedicamentoInfoDto> getAll() {
         List<MedicamentoInfoDto> medicamentos = new ArrayList<>(); 
         repository.findAll().stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
-                        null,
-                        null, 
+                        medicamento.id(),
+                        medicamento.usuario().cpf(), 
                         medicamento.nome(), 
                         medicamento.dosagem(), 
                         medicamento.administracao(), 
@@ -60,8 +60,8 @@ public class MedicamentoService {
         Medicamento medicamento = repository.findById(id).get();
 
         return new MedicamentoInfoDto(
-                        null,
-                        null, 
+                        medicamento.id(),
+                        medicamento.usuario().cpf(), 
                         medicamento.nome(), 
                         medicamento.dosagem(), 
                         medicamento.administracao(), 
@@ -75,8 +75,8 @@ public class MedicamentoService {
     public List<MedicamentoInfoDto> getByUsuarioCpf(String usuarioCpf) {
         List<MedicamentoInfoDto> medicamentos = new ArrayList<>(); 
         repository.findByUsuarioCpf(usuarioCpf).stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
-                        null,
-                        null, 
+                        medicamento.id(),
+                        medicamento.usuario().cpf(), 
                         medicamento.nome(), 
                         medicamento.dosagem(), 
                         medicamento.administracao(), 
@@ -103,8 +103,8 @@ public class MedicamentoService {
         repository.save(medicamento);
 
         return new MedicamentoInfoDto(
-                        null, 
-                        null, 
+                        medicamento.id(),
+                        medicamento.usuario().cpf(), 
                         medicamento.nome(), 
                         medicamento.dosagem(), 
                         medicamento.administracao(), 
