@@ -26,14 +26,14 @@ public class MedicamentoService {
 
         Medicamento medicamento = new Medicamento();
         medicamento.setUsuario(usuario);
-        medicamento.setNome(medicamentoInfo.nome());
-        medicamento.setDosagem(medicamentoInfo.dosagem());
+        medicamento.setNome(medicamentoInfo.nome().trim());
+        medicamento.setDosagem(medicamentoInfo.dosagem().trim());
         medicamento.setAdministracao(medicamentoInfo.administracao());
-        medicamento.setFrequencia(medicamentoInfo.frequencia());
+        medicamento.setFrequencia(medicamentoInfo.frequencia().trim());
         medicamento.setInicio(medicamentoInfo.inicio());
         medicamento.setTermino(medicamentoInfo.termino());
         medicamento.setContinuo(medicamentoInfo.continuo());
-        medicamento.setObservacoes(medicamentoInfo.observacoes());
+        medicamento.setObservacoes(medicamentoInfo.observacoes().trim());
 
         repository.save(medicamento);
 
@@ -74,9 +74,9 @@ public class MedicamentoService {
 
     public List<MedicamentoInfoDto> getByUsuarioCpf(String usuarioCpf) {
         List<MedicamentoInfoDto> medicamentos = new ArrayList<>(); 
-        repository.findByUsuarioCpf(usuarioCpf).stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
+        repository.findByUsuarioCpf(usuarioCpf.trim()).stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
                         medicamento.id(),
-                        medicamento.usuario().cpf(), 
+                        usuarioCpf, 
                         medicamento.nome(), 
                         medicamento.dosagem(), 
                         medicamento.administracao(), 
@@ -91,19 +91,19 @@ public class MedicamentoService {
     public MedicamentoInfoDto update(Long id, MedicamentoInfoDto medicamentoInfo) {
         Medicamento medicamento = repository.findById(id).orElseThrow();
 
-        medicamento.setNome(medicamentoInfo.nome());
-        medicamento.setDosagem(medicamentoInfo.dosagem());
+        medicamento.setNome(medicamentoInfo.nome().trim());
+        medicamento.setDosagem(medicamentoInfo.dosagem().trim());
         medicamento.setAdministracao(medicamentoInfo.administracao());
-        medicamento.setFrequencia(medicamentoInfo.frequencia());
+        medicamento.setFrequencia(medicamentoInfo.frequencia().trim());
         medicamento.setInicio(medicamentoInfo.inicio());
         medicamento.setTermino(medicamentoInfo.termino());
         medicamento.setContinuo(medicamentoInfo.continuo());
-        medicamento.setObservacoes(medicamentoInfo.observacoes());
+        medicamento.setObservacoes(medicamentoInfo.observacoes().trim());
 
         repository.save(medicamento);
 
         return new MedicamentoInfoDto(
-                        medicamento.id(),
+                        id,
                         medicamento.usuario().cpf(), 
                         medicamento.nome(), 
                         medicamento.dosagem(), 

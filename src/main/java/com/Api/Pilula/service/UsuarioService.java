@@ -2,7 +2,6 @@ package com.Api.Pilula.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +27,12 @@ public class UsuarioService {
     }
 
     public UsuarioInfoDto getByCpf(String cpf) {
-        Usuario usuario = repository.findById(cpf).get();
+        Usuario usuario = repository.findById(cpf.trim()).get();
         return new UsuarioInfoDto(usuario.cpf(), usuario.nome(), usuario.email());
     }
 
     public UsuarioInfoDto update(String cpf, Usuario usuarioInfo) {
-        Usuario usuario = repository.findById(cpf).get();
+        Usuario usuario = repository.findById(cpf.trim()).get();
 
         if(usuarioInfo.senha() != null && !new Usuario().validarSenha(usuarioInfo.senha())) {
             throw new RuntimeException();
@@ -55,6 +54,6 @@ public class UsuarioService {
     }
 
     public void delete(String cpf) {
-        repository.deleteById(cpf);
+        repository.deleteById(cpf.trim());
     }
 }

@@ -32,11 +32,11 @@ public class AuthService {
 
 
     public AccessTokenDto register(RegistroUsuarioDto usuarioInfo) {
-        if(!new Usuario().validarSenha(usuarioInfo.senha())) {
+        if(!new Usuario().validarSenha(usuarioInfo.senha().trim())) {
             throw new RuntimeException();
         }
 
-        if (!usuarioInfo.senha().equals(usuarioInfo.confirmarSenha())) {
+        if (!usuarioInfo.senha().trim().equals(usuarioInfo.confirmarSenha().trim())) {
             throw new RuntimeException();
         }
 
