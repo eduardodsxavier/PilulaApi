@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Api.Pilula.dtos.MedicamentoInfoDto;
-import com.Api.Pilula.model.Medicamento;
 import com.Api.Pilula.service.MedicamentoService;
 
 @RequestMapping("/medicamentos")
@@ -48,8 +47,7 @@ public class MedicamentoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<MedicamentoInfoDto> updateMedicamento(@PathVariable("id") Long id,
-            @RequestBody MedicamentoInfoDto medicamentoInfo) {
+    public ResponseEntity<MedicamentoInfoDto> updateMedicamento(@PathVariable("id") Long id, @RequestBody MedicamentoInfoDto medicamentoInfo) {
         return new ResponseEntity<MedicamentoInfoDto>(service.update(id, medicamentoInfo), HttpStatus.OK);
     }
 

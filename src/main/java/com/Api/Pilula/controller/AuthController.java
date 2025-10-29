@@ -18,15 +18,15 @@ public class AuthController {
     private AuthService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AccessTokenDto> register(@RequestBody RegistroUsuarioDto usuario)  {
-        AccessTokenDto accessToken = service.register(usuario);
+    public ResponseEntity<AccessTokenDto> register(@RequestBody RegistroUsuarioDto registroUsuario)  {
+        AccessTokenDto accessToken = service.register(registroUsuario);
 
         return new ResponseEntity<>(new AccessTokenDto(accessToken.token()), HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AccessTokenDto> login(@RequestBody LoginUsuarioDto usuario) {
-        AccessTokenDto accessToken = service.authenticate(usuario);
+    public ResponseEntity<AccessTokenDto> login(@RequestBody LoginUsuarioDto loginUsuario) {
+        AccessTokenDto accessToken = service.authenticate(loginUsuario);
 
         return new ResponseEntity<>(new AccessTokenDto(accessToken.token()), HttpStatus.OK);
     }

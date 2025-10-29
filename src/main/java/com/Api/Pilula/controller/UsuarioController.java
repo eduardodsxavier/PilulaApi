@@ -25,30 +25,18 @@ public class UsuarioController {
     @GetMapping("/{cpf}")
     public ResponseEntity<UsuarioInfoDto> getUsuarioByCpf(@PathVariable String cpf) {
         UsuarioInfoDto usuario = service.getByCpf(cpf);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(usuario);
     }
 
     @PutMapping("/{cpf}")
     public ResponseEntity<UsuarioInfoDto> updateUsuario(@PathVariable String cpf, @RequestBody Usuario usuarioAtualizado) {
         UsuarioInfoDto usuario = service.update(cpf, usuarioAtualizado);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(usuario);
     }
 
     @DeleteMapping("/{cpf}")
     public ResponseEntity<Void> deleteUsuario(@PathVariable String cpf) {
-        boolean deleted = service.delete(cpf);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        service.delete(cpf);
+        return ResponseEntity.noContent().build();
     }
 }

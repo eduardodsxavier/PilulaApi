@@ -12,7 +12,5 @@ import com.Api.Pilula.model.Medicamento;
 public interface MedicamentoRepository extends JpaRepository<Medicamento, Long> {
     Optional<Medicamento> findById(Long id);
 
-    Optional<Medicamento> findByNome(String nome);
-
     List<Medicamento> findByUsuarioCpf(String usuarioCpf);
 }

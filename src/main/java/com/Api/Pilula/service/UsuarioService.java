@@ -32,35 +32,29 @@ public class UsuarioService {
         return new UsuarioInfoDto(usuario.cpf(), usuario.nome(), usuario.email());
     }
 
-    public UsuarioInfoDto update(String cpf, Usuario usuarioAtualizado) {
-        Optional<Usuario> usuarioExistente = repository.findById(cpf);
+    public UsuarioInfoDto update(String cpf, Usuario usuarioInfo) {
+        Usuario usuario = repository.findById(cpf).get();
 
-        if(usuarioAtualizado.senha() != null && !new Usuario().validarSenha(usuarioAtualizado.senha())) {
+        if(usuarioInfo.senha() != null && !new Usuario().validarSenha(usuarioInfo.senha())) {
             throw new RuntimeException();
         }
 
-        if (usuarioExistente.isPresent()) {
-            Usuario usuario = usuarioExistente.get();
-            if (usuarioAtualizado.nome() != null) {
-                usuario.setNome(usuarioAtualizado.nome().trim());
-            }
-            if (usuarioAtualizado.email() != null) {
-                usuario.setEmail(usuarioAtualizado.email().trim());
-            }
-            if (usuarioAtualizado.senha() != null) {
-                usuario.setSenha(securityConfig.passwordEncoder().encode(usuarioAtualizado.senha().trim()));
-            }
-            repository.save(usuario);
-            return new UsuarioInfoDto(usuario.cpf(), usuario.nome(), usuario.email());
+        if (usuarioInfo.nome() != null) {
+            usuario.setNome(usuarioInfo.nome().trim());
         }
-        return null;
+        if (usuarioInfo.email() != null) {
+            usuario.setEmail(usuarioInfo.email().trim());
+        }
+        if (usuarioInfo.senha() != null) {
+            usuario.setSenha(securityConfig.passwordEncoder().encode(usuarioInfo.senha().trim()));
+        }
+
+        repository.save(usuario);
+
+        return new UsuarioInfoDto(usuario.cpf(), usuario.nome(), usuario.email());
     }
 
-    public boolean delete(String cpf) {
-        if (repository.existsById(cpf)) {
-            repository.deleteById(cpf);
-            return true;
-        }
-        return false;
+    public void delete(String cpf) {
+        repository.deleteById(cpf);
     }
 }
