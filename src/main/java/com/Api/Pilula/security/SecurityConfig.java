@@ -23,8 +23,8 @@ public class SecurityConfig {
     private UserAuthenticationFilter userAuthenticationFilter;
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-        "/auth/register",
-        "/auth/login",
+        "/api/v1/auth/register",
+        "/api/v1/auth/login",
     };
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
@@ -41,7 +41,7 @@ public class SecurityConfig {
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
                     .requestMatchers(ENDPOINTS_ADMIN).hasRole("admin")
-                    .anyRequest().permitAll())
+                    .anyRequest().authenticated())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .formLogin(form -> form.disable())
             .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

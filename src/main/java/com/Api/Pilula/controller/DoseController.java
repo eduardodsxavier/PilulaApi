@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Api.Pilula.dtos.DoseInfoDto;
 import com.Api.Pilula.service.DoseService;
 
-@RequestMapping("/doses")
+@RequestMapping("/api/v1/doses")
 @RestController
 public class DoseController {
 

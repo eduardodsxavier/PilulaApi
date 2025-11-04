@@ -11,7 +11,7 @@ import com.Api.Pilula.dtos.AccessTokenDto;
 import com.Api.Pilula.service.AuthService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     @Autowired

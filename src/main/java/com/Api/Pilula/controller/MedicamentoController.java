@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Api.Pilula.dtos.MedicamentoInfoDto;
 import com.Api.Pilula.service.MedicamentoService;
 
-@RequestMapping("/medicamentos")
+@RequestMapping("/api/v1/medicamentos")
 @RestController
 public class MedicamentoController {
 

@@ -11,7 +11,7 @@ import com.Api.Pilula.model.Usuario;
 import com.Api.Pilula.service.UsuarioService;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/api/v1/usuario")
 public class UsuarioController {
 
     @Autowired
