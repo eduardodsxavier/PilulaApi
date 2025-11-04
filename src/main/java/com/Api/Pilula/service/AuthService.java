@@ -40,6 +40,10 @@ public class AuthService {
             throw new RuntimeException();
         }
 
+        if (repository.existsById(usuarioInfo.cpf().trim())) {
+            throw new RuntimeException();
+        }
+
         Usuario usuario = new Usuario(
                 usuarioInfo.cpf().trim(), 
                 usuarioInfo.nome().trim(), 
