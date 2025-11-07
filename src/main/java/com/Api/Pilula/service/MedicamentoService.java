@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.Api.Pilula.repository.MedicamentoRepository;
 import com.Api.Pilula.repository.UsuarioRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.Api.Pilula.dtos.MedicamentoInfoDto;
 import com.Api.Pilula.model.Medicamento;
 import com.Api.Pilula.model.Usuario;
@@ -21,8 +24,11 @@ public class MedicamentoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public MedicamentoInfoDto save(MedicamentoInfoDto medicamentoInfo) {
-        Usuario usuario = usuarioRepository.findByCpf(medicamentoInfo.cpfUsuario()).get(); 
+    @Autowired
+    private JwtService jwtService;
+
+    public MedicamentoInfoDto save(MedicamentoInfoDto medicamentoInfo, HttpServletRequest request) {
+        Usuario usuario = usuarioRepository.findByCpf(jwtService.getSubjectFromRequest(request)).get(); 
 
         Medicamento medicamento = new Medicamento();
         medicamento.setUsuario(usuario);
@@ -40,24 +46,13 @@ public class MedicamentoService {
         return medicamentoInfo;
     }
 
-    public List<MedicamentoInfoDto> getAll() {
-        List<MedicamentoInfoDto> medicamentos = new ArrayList<>(); 
-        repository.findAll().stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
-                        medicamento.id(),
-                        medicamento.usuario().cpf(), 
-                        medicamento.nome(), 
-                        medicamento.dosagem(), 
-                        medicamento.administracao(), 
-                        medicamento.frequencia(), 
-                        medicamento.inicio(), 
-                        medicamento.termino(), 
-                        medicamento.continuo(), 
-                        medicamento.observacoes()))); 
-        return medicamentos;
-    }
-
-    public MedicamentoInfoDto getById(Long id) {
+    public MedicamentoInfoDto getById(Long id, HttpServletRequest request) {
         Medicamento medicamento = repository.findById(id).get();
+        String usuarioCpf = jwtService.getSubjectFromRequest(request);
+
+        if (!medicamento.usuario().cpf().equals(usuarioCpf)) {
+            throw new RuntimeException();
+        }
 
         return new MedicamentoInfoDto(
                         medicamento.id(),
@@ -72,24 +67,31 @@ public class MedicamentoService {
                         medicamento.observacoes()); 
     }
 
-    public List<MedicamentoInfoDto> getByUsuarioCpf(String usuarioCpf) {
+    public List<MedicamentoInfoDto> getByUsuario(HttpServletRequest request) {
         List<MedicamentoInfoDto> medicamentos = new ArrayList<>(); 
-        repository.findByUsuarioCpf(usuarioCpf.trim()).stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
-                        medicamento.id(),
-                        usuarioCpf, 
-                        medicamento.nome(), 
-                        medicamento.dosagem(), 
-                        medicamento.administracao(), 
-                        medicamento.frequencia(), 
-                        medicamento.inicio(), 
-                        medicamento.termino(), 
-                        medicamento.continuo(), 
-                        medicamento.observacoes()))); 
+        String usuarioCpf = jwtService.getSubjectFromRequest(request);
+
+        repository.findByUsuarioCpf(usuarioCpf).stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
+                    medicamento.id(),
+                    usuarioCpf, 
+                    medicamento.nome(), 
+                    medicamento.dosagem(), 
+                    medicamento.administracao(), 
+                    medicamento.frequencia(), 
+                    medicamento.inicio(), 
+                    medicamento.termino(), 
+                    medicamento.continuo(), 
+                    medicamento.observacoes()))); 
         return medicamentos;
     }
 
-    public MedicamentoInfoDto update(Long id, MedicamentoInfoDto medicamentoInfo) {
+    public MedicamentoInfoDto update(Long id, MedicamentoInfoDto medicamentoInfo, HttpServletRequest request) {
         Medicamento medicamento = repository.findById(id).orElseThrow();
+        String usuarioCpf = jwtService.getSubjectFromRequest(request);
+
+        if (!medicamento.usuario().cpf().equals(usuarioCpf)) {
+            throw new RuntimeException();
+        }
 
         medicamento.setNome(medicamentoInfo.nome().trim());
         medicamento.setDosagem(medicamentoInfo.dosagem().trim());
@@ -115,7 +117,7 @@ public class MedicamentoService {
                         medicamento.observacoes()); 
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    public void delete(Long id, HttpServletRequest request) {
+        repository.deleteByIdAndUsuarioCpf(id, jwtService.getSubjectFromRequest(request));
     }
 }

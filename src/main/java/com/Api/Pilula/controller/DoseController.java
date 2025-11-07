@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Api.Pilula.dtos.DoseInfoDto;
 import com.Api.Pilula.service.DoseService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RequestMapping("/api/v1/doses")
 @RestController
 public class DoseController {
@@ -27,33 +29,28 @@ public class DoseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DoseInfoDto addDose(@RequestBody DoseInfoDto doseInfo) {
-        return service.save(doseInfo);
-    }
-
-    @GetMapping
-    public List<DoseInfoDto> getAllDoses() {
-        return service.getAll();
+    public DoseInfoDto addDose(@RequestBody DoseInfoDto doseInfo, HttpServletRequest request) {
+        return service.save(doseInfo, request);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<DoseInfoDto> getDosesById(@PathVariable("id") Long id) {
-        return new ResponseEntity<DoseInfoDto>(service.getById(id), HttpStatus.OK);
+    public ResponseEntity<DoseInfoDto> getDosesById(@PathVariable("id") Long id, HttpServletRequest request) {
+        return new ResponseEntity<DoseInfoDto>(service.getById(id, request), HttpStatus.OK);
     }
 
     @GetMapping("/medicamentos/{id}")
-    public List<DoseInfoDto> getDosesByMedicamentoId(@PathVariable("id") Long medicamentoId) {
-        return service.getByMedicamentoId(medicamentoId);
+    public List<DoseInfoDto> getDosesByMedicamentoId(@PathVariable("id") Long medicamentoId, HttpServletRequest request) {
+        return service.getByMedicamentoId(medicamentoId, request);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<DoseInfoDto> updateDose(@PathVariable("id") Long id, @RequestBody DoseInfoDto doseInfo) {
-        return new ResponseEntity<DoseInfoDto>(service.update(id, doseInfo), HttpStatus.OK);
+    public ResponseEntity<DoseInfoDto> updateDose(@PathVariable("id") Long id, @RequestBody DoseInfoDto doseInfo, HttpServletRequest request) {
+        return new ResponseEntity<DoseInfoDto>(service.update(id, doseInfo, request), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteDose(@PathVariable("id") Long id) {
-        service.delete(id);
+    public ResponseEntity<String> deleteDose(@PathVariable("id") Long id, HttpServletRequest request) {
+        service.delete(id, request);
         return new ResponseEntity<String>("Dose deleted successfully!", HttpStatus.OK);
     }
 }

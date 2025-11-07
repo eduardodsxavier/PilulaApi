@@ -1,8 +1,5 @@
 package com.Api.Pilula.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +7,8 @@ import com.Api.Pilula.dtos.UsuarioInfoDto;
 import com.Api.Pilula.model.Usuario;
 import com.Api.Pilula.repository.UsuarioRepository;
 import com.Api.Pilula.security.SecurityConfig;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class UsuarioService {
@@ -20,18 +19,17 @@ public class UsuarioService {
     @Autowired
     private SecurityConfig securityConfig;
 
-    public List<UsuarioInfoDto> getAll() {
-        List<UsuarioInfoDto> usuarios = new ArrayList<>(); 
-        repository.findAll().stream().forEach(usuario -> usuarios.add(new UsuarioInfoDto(usuario.cpf(), usuario.cpf(), usuario.email()))); 
-        return usuarios;
-    }
+    @Autowired
+    private JwtService jwtService;
 
-    public UsuarioInfoDto getByCpf(String cpf) {
-        Usuario usuario = repository.findById(cpf.trim()).get();
+    public UsuarioInfoDto userInformation(HttpServletRequest request) {
+        String cpf = jwtService.getSubjectFromRequest(request);
+        Usuario usuario = repository.findByCpf(cpf).get();
         return new UsuarioInfoDto(usuario.cpf(), usuario.nome(), usuario.email());
     }
 
-    public UsuarioInfoDto update(String cpf, Usuario usuarioInfo) {
+    public UsuarioInfoDto update(HttpServletRequest request, Usuario usuarioInfo) {
+        String cpf = jwtService.getSubjectFromRequest(request);
         Usuario usuario = repository.findById(cpf.trim()).get();
 
         if(usuarioInfo.senha() != null && !new Usuario().validarSenha(usuarioInfo.senha())) {
@@ -53,7 +51,7 @@ public class UsuarioService {
         return new UsuarioInfoDto(usuario.cpf(), usuario.nome(), usuario.email());
     }
 
-    public void delete(String cpf) {
-        repository.deleteById(cpf.trim());
+    public void delete(HttpServletRequest request) {
+        repository.deleteById(jwtService.getSubjectFromRequest(request));
     }
 }

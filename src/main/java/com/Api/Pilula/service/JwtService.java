@@ -47,6 +47,11 @@ public class JwtService {
         return ZonedDateTime.now(ZoneId.of("GMT-3")).plusMinutes(30).toInstant();
     }
 
+    public String getSubjectFromRequest(HttpServletRequest request) {
+        String token = recoveryToken(request);
+        return getSubjectFromToken(token);
+    }
+
     public String recoveryToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         if (header == null) {return null;}

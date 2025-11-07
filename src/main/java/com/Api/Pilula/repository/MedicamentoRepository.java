@@ -13,4 +13,6 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Long> 
     Optional<Medicamento> findById(Long id);
 
     List<Medicamento> findByUsuarioCpf(String usuarioCpf);
+
+    void deleteByIdAndUsuarioCpf(long id, String usuarioCpf);
 }

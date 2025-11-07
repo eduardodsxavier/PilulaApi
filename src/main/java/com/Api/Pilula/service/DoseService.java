@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.Api.Pilula.repository.DoseRepository;
 import com.Api.Pilula.repository.MedicamentoRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.Api.Pilula.dtos.DoseInfoDto;
 import com.Api.Pilula.model.Dose;
 import com.Api.Pilula.model.Medicamento;
@@ -20,9 +23,17 @@ public class DoseService {
 
     @Autowired 
     private MedicamentoRepository medicamentoRepository;
+
+    @Autowired 
+    private JwtService jwtService;
     
-    public DoseInfoDto save(DoseInfoDto doseInfo) {
+    public DoseInfoDto save(DoseInfoDto doseInfo, HttpServletRequest request) {
         Medicamento medicamento = medicamentoRepository.findById(doseInfo.medicamentoId()).get();
+        String usuarioCpf = jwtService.getSubjectFromRequest(request);
+        if (!medicamento.usuario().cpf().equals(usuarioCpf)) {
+            throw new RuntimeException();
+        }
+
         Dose dose = new Dose();
         dose.setMedicamento(medicamento);
         dose.setHoraPrevista(doseInfo.horaPrevista());
@@ -30,26 +41,30 @@ public class DoseService {
         repository.save(dose);
         return doseInfo;
     }
-
-    public List<DoseInfoDto> getAll() {
-        List<DoseInfoDto> doses = new ArrayList<>();
-        repository.findAll().stream().forEach(dose -> doses.add(new DoseInfoDto(dose.id(), dose.medicamento().id(), dose.horaPrevista(), dose.status())));
-        return doses;
-    }
      
-    public DoseInfoDto getById(Long id) {
+    public DoseInfoDto getById(Long id, HttpServletRequest request) {
         Dose dose = repository.findById(id).get();
+        String usuarioCpf = jwtService.getSubjectFromRequest(request);
+        if (!dose.medicamento().usuario().cpf().equals(usuarioCpf)) {
+            throw new RuntimeException();
+        }
+
         return new DoseInfoDto(dose.id(), dose.medicamento().id(), dose.horaPrevista(), dose.status());
     }
 
-    public List<DoseInfoDto> getByMedicamentoId(Long medicamentoId) {
+    public List<DoseInfoDto> getByMedicamentoId(Long medicamentoId, HttpServletRequest request) {
         List<DoseInfoDto> doses = new ArrayList<>();
-        repository.findByMedicamentoId(medicamentoId).stream().forEach(dose -> doses.add(new DoseInfoDto(dose.id(), dose.medicamento().id(), dose.horaPrevista(), dose.status())));
+        String usuarioCpf = jwtService.getSubjectFromRequest(request);
+        repository.findByMedicamentoId(medicamentoId).stream().filter(dose -> dose.medicamento().usuario().cpf().equals(usuarioCpf)).forEach(dose -> doses.add(new DoseInfoDto(dose.id(), dose.medicamento().id(), dose.horaPrevista(), dose.status())));
         return doses;
     }
 
-    public DoseInfoDto update(Long id, DoseInfoDto newInfo) {
+    public DoseInfoDto update(Long id, DoseInfoDto newInfo, HttpServletRequest request) {
         Dose dose = repository.findById(id).orElseThrow();
+        String usuarioCpf = jwtService.getSubjectFromRequest(request);
+        if (!dose.medicamento().usuario().cpf().equals(usuarioCpf)) {
+            throw new RuntimeException();
+        }
 
         if (newInfo.horaPrevista() != null) {
             dose.setHoraPrevista(newInfo.horaPrevista());
@@ -63,7 +78,13 @@ public class DoseService {
         return newInfo;
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, HttpServletRequest request) {
+        Dose dose = repository.findById(id).orElseThrow();
+        String usuarioCpf = jwtService.getSubjectFromRequest(request);
+        if (!dose.medicamento().usuario().cpf().equals(usuarioCpf)) {
+            throw new RuntimeException();
+        }
+
         repository.deleteById(id);
     }
 }
