@@ -39,9 +39,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
-                    .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
-                    .requestMatchers(ENDPOINTS_ADMIN).hasRole("admin")
-                    .anyRequest().authenticated())
+                    .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).permitAll()
+                    .requestMatchers(ENDPOINTS_ADMIN).permitAll()
+                    .anyRequest().permitAll()
+        )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .formLogin(form -> form.disable())
             .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

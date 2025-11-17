@@ -21,5 +21,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Usuario user = repository.findByCpf(cpf).orElseThrow(() -> new RuntimeException("User not find"));
         return new UserDetailsImpl(user);
     }
-    
+
 }

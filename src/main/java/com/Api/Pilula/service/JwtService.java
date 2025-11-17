@@ -15,30 +15,30 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "change to enviroment variable"; 
-    private static final String ISSUER = "AUTHRBAC"; 
+    private static final String SECRET_KEY = "change to enviroment variable";
+    private static final String ISSUER = "AUTHRBAC";
 
     public String generateToken(UserDetailsImpl user) {
         return JWT.create()
-            .withIssuer(ISSUER)
-            .withIssuedAt(creationDate())
-            .withExpiresAt(expirationDate())
-            .withSubject(user.getUsername())
-            .sign(Algorithm.HMAC256(SECRET_KEY));
+                .withIssuer(ISSUER)
+                .withIssuedAt(creationDate())
+                .withExpiresAt(expirationDate())
+                .withSubject(user.getUsername())
+                .sign(Algorithm.HMAC256(SECRET_KEY));
     }
 
     public String getSubjectFromToken(String token) {
         try {
             return JWT.require(Algorithm.HMAC256(SECRET_KEY))
-                .withIssuer(ISSUER)
-                .build()
-                .verify(token)
-                .getSubject();
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token)
+                    .getSubject();
         } catch (JWTVerificationException e) {
             throw new JWTVerificationException("invalid or expired token");
         }
     }
-    
+
     private Instant creationDate() {
         return ZonedDateTime.now(ZoneId.of("GMT-3")).toInstant();
     }
@@ -54,7 +54,9 @@ public class JwtService {
 
     public String recoveryToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
-        if (header == null) {return null;}
+        if (header == null) {
+            return null;
+        }
         return header.replace("Bearer ", "");
     }
 }

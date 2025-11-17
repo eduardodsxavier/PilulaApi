@@ -32,7 +32,7 @@ public class UsuarioService {
         String cpf = jwtService.getSubjectFromRequest(request);
         Usuario usuario = repository.findById(cpf.trim()).get();
 
-        if(usuarioInfo.senha() != null && !new Usuario().validarSenha(usuarioInfo.senha())) {
+        if (usuarioInfo.senha() != null && !new Usuario().validarSenha(usuarioInfo.senha())) {
             throw new RuntimeException();
         }
 

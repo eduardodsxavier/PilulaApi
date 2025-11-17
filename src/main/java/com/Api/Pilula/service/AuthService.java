@@ -30,39 +30,38 @@ public class AuthService {
     @Autowired
     private SecurityConfig securityConfig;
 
-
     public AccessTokenDto register(RegistroUsuarioDto usuarioInfo) {
-        if(!new Usuario().validarSenha(usuarioInfo.senha().trim())) {
-            throw new RuntimeException();
-        }
+        String senha = usuarioInfo.senha().trim();
+        String cpf = usuarioInfo.cpf().trim();
 
-        if (!usuarioInfo.senha().trim().equals(usuarioInfo.confirmarSenha().trim())) {
-            throw new RuntimeException();
-        }
+        // if (!new Usuario().validarSenha(senha)) {
+        //     throw new IllegalArgumentException("Senha inválida. Ela deve atender aos requisitos mínimos.");
+        // }
 
-        if (repository.existsById(usuarioInfo.cpf().trim())) {
-            throw new RuntimeException();
+
+        if (repository.existsById(cpf)) {
+            throw new IllegalArgumentException("Já existe um usuário cadastrado com esse CPF.");
         }
 
         Usuario usuario = new Usuario(
-                usuarioInfo.cpf().trim(), 
-                usuarioInfo.nome().trim(), 
-                usuarioInfo.email().trim(), 
-                securityConfig.passwordEncoder().encode(usuarioInfo.senha().trim()));
+                cpf,
+                usuarioInfo.nome().trim(),
+                usuarioInfo.email().trim(),
+                securityConfig.passwordEncoder().encode(senha));
 
         repository.save(usuario);
 
         UserDetailsImpl userDetails = new UserDetailsImpl(usuario);
-
         String accessToken = jwtService.generateToken(userDetails);
 
         return new AccessTokenDto(accessToken);
     }
 
     public AccessTokenDto authenticate(LoginUsuarioDto usuarioInfo) {
-        UsernamePasswordAuthenticationToken userAuthenticationToken = new UsernamePasswordAuthenticationToken(usuarioInfo.cpf().trim(), usuarioInfo.senha().trim());
+        UsernamePasswordAuthenticationToken userAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                usuarioInfo.cpf().trim(), usuarioInfo.senha().trim());
 
-        Authentication authentication = manager.authenticate(userAuthenticationToken); 
+        Authentication authentication = manager.authenticate(userAuthenticationToken);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
