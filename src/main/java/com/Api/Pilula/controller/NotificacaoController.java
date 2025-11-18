@@ -11,7 +11,7 @@ import com.Api.Pilula.dtos.DoseInfoDto;
 import com.Api.Pilula.service.NotificacaoService;
 
 @RestController
-@RequestMapping("/notificacao")
+@RequestMapping("/api/v1/notificacao")
 public class NotificacaoController {
 
     private final NotificacaoService notificacaoService;
