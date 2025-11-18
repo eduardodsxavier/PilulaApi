@@ -1,7 +1,7 @@
 package com.Api.Pilula.repository;
 
 import java.util.Optional;
-import java.time.LocalDateTime;
+import java.sql.Time;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,14 +17,10 @@ public interface DoseRepository extends JpaRepository<Dose, Long> {
 
     List<Dose> findByMedicamentoId(Long medicamentoId);
 
- @Query("""
-    SELECT d FROM Dose d 
-    WHERE d.medicamento.usuario.cpf = :cpf
-    AND d.horaPrevista BETWEEN :inicio AND :fim
-""")
+    @Query(value = "SELECT d.* FROM dose d JOIN medicamento m ON d.medicamento_id = m.id WHERE m.usuario_cpf = :cpf AND d.hora_prevista BETWEEN :inicio AND :fim", nativeQuery = true)
     List<Dose> buscarDosesPorCpfEPeriodo(
-        @Param("cpf") String cpf,
-        @Param("inicio") LocalDateTime inicio,
-        @Param("fim") LocalDateTime fim
-    );
+            @Param("cpf") String cpf,
+            @Param("inicio") Time inicio,
+            @Param("fim") Time fim
+            );
 }
