@@ -34,9 +34,9 @@ public class AuthService {
         String senha = usuarioInfo.senha().trim();
         String cpf = usuarioInfo.cpf().trim();
 
-        // if (!new Usuario().validarSenha(senha)) {
-        //     throw new IllegalArgumentException("Senha inválida. Ela deve atender aos requisitos mínimos.");
-        // }
+        if (!new Usuario().validarSenha(senha)) {
+            throw new IllegalArgumentException("Senha inválida. Ela deve atender aos requisitos mínimos.");
+        }
 
 
         if (repository.existsById(cpf)) {

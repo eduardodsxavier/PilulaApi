@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "change to enviroment variable";
+    private static final String SECRET_KEY = "d386d2f1326bc8b595cab8cfe81cdb435c086fe3c1d7ac8d146487ec1c79bd0126baaf485592da4a13fbb71e25b0e8972205ee9d34ec9951d5c1e1cb84689bba";
     private static final String ISSUER = "AUTHRBAC";
 
     public String generateToken(UserDetailsImpl user) {
@@ -54,9 +54,7 @@ public class JwtService {
 
     public String recoveryToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
-        if (header == null) {
-            return null;
-        }
-        return header.replace("Bearer ", "");
+        System.out.println("HEADER RECEBIDO = " + header);
+        return header == null ? null : header.replace("Bearer ", "");
     }
 }
