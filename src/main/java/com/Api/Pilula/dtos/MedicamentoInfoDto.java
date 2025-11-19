@@ -1,7 +1,8 @@
 package com.Api.Pilula.dtos;
 
 import com.Api.Pilula.enums.Administracao;
-
+import java.util.List; 
+import java.sql.Time;
 import java.util.Date;
 
 public record MedicamentoInfoDto(
@@ -14,5 +15,6 @@ public record MedicamentoInfoDto(
     Date inicio,
     Date termino,
     Boolean continuo,
-    String observacoes
+    String observacoes,
+    List<Time> horasPrevistas
 ) {}

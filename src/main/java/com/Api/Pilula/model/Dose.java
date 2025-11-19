@@ -4,6 +4,7 @@ import com.Api.Pilula.enums.Status;
 
 import java.sql.Time;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,7 +16,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
-@Table(name = "dose")
+@Table(name = "dose") 
 @Entity
 public class Dose {
 
@@ -23,23 +24,22 @@ public class Dose {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Medicamento medicamento;
-
-    @Column(unique = true, nullable = false)
+    
+    @Column(nullable = false)
     private Time horaPrevista;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Dose() {
-    }
-
+    public Dose() {}
+ 
     public Dose(Long id, Medicamento medicamento, Time horaPrevista, Status status) {
         this.id = id;
         this.medicamento = medicamento;
-        this.horaPrevista = horaPrevista;
+        this.horaPrevista = horaPrevista; 
         this.status = status;
     }
 

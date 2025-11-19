@@ -1,19 +1,23 @@
 package com.Api.Pilula.service;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.Api.Pilula.enums.Status;
 import com.Api.Pilula.repository.MedicamentoRepository;
 import com.Api.Pilula.repository.UsuarioRepository;
+import com.Api.Pilula.repository.DoseRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import com.Api.Pilula.dtos.MedicamentoInfoDto;
 import com.Api.Pilula.model.Medicamento;
 import com.Api.Pilula.model.Usuario;
+import com.Api.Pilula.model.Dose;
 
 @Service
 public class MedicamentoService {
@@ -25,10 +29,16 @@ public class MedicamentoService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private DoseRepository doseRepository;
+
+    @Autowired
     private JwtService jwtService;
 
     public MedicamentoInfoDto save(MedicamentoInfoDto medicamentoInfo, HttpServletRequest request) {
-        Usuario usuario = usuarioRepository.findByCpf(jwtService.getSubjectFromRequest(request)).get(); 
+
+        Usuario usuario = usuarioRepository
+                .findByCpf(jwtService.getSubjectFromRequest(request))
+                .orElseThrow();
 
         Medicamento medicamento = new Medicamento();
         medicamento.setUsuario(usuario);
@@ -39,49 +49,96 @@ public class MedicamentoService {
         medicamento.setInicio(medicamentoInfo.inicio());
         medicamento.setTermino(medicamentoInfo.termino());
         medicamento.setContinuo(medicamentoInfo.continuo());
-        medicamento.setObservacoes(medicamentoInfo.observacoes().trim());
+        medicamento.setObservacoes(
+            medicamentoInfo.observacoes() != null ? medicamentoInfo.observacoes().trim() : null
+        );
 
         repository.save(medicamento);
 
-        return medicamentoInfo;
+        if (medicamentoInfo.horasPrevistas() != null) {
+            for (Time hora : medicamentoInfo.horasPrevistas()) {
+                Dose dose = new Dose();
+                dose.setMedicamento(medicamento);
+                dose.setHoraPrevista(hora);
+                dose.setStatus(Status.prescrito);
+                doseRepository.save(dose);
+            }
+        }
+
+        List<Time> horas = doseRepository.findByMedicamentoId(medicamento.id())
+                .stream()
+                .map(Dose::horaPrevista)
+                .toList();
+
+        return new MedicamentoInfoDto(
+                medicamento.id(),
+                usuario.cpf(),
+                medicamento.nome(),
+                medicamento.dosagem(),
+                medicamento.administracao(),
+                medicamento.frequencia(),
+                medicamento.inicio(),
+                medicamento.termino(),
+                medicamento.continuo(),
+                medicamento.observacoes(),
+                horas
+        );
     }
 
     public MedicamentoInfoDto getById(Long id, HttpServletRequest request) {
-        Medicamento medicamento = repository.findById(id).get();
+        Medicamento medicamento = repository.findById(id).orElseThrow();
         String usuarioCpf = jwtService.getSubjectFromRequest(request);
 
         if (!medicamento.usuario().cpf().equals(usuarioCpf)) {
-            throw new RuntimeException();
+            throw new RuntimeException("Acesso negado ao medicamento.");
         }
 
+        List<Time> horas = doseRepository.findByMedicamentoId(id)
+                .stream()
+                .map(Dose::horaPrevista)
+                .toList();
+
         return new MedicamentoInfoDto(
-                        medicamento.id(),
-                        medicamento.usuario().cpf(), 
-                        medicamento.nome(), 
-                        medicamento.dosagem(), 
-                        medicamento.administracao(), 
-                        medicamento.frequencia(), 
-                        medicamento.inicio(), 
-                        medicamento.termino(), 
-                        medicamento.continuo(), 
-                        medicamento.observacoes()); 
+                medicamento.id(),
+                medicamento.usuario().cpf(),
+                medicamento.nome(),
+                medicamento.dosagem(),
+                medicamento.administracao(),
+                medicamento.frequencia(),
+                medicamento.inicio(),
+                medicamento.termino(),
+                medicamento.continuo(),
+                medicamento.observacoes(),
+                horas
+        );
     }
 
     public List<MedicamentoInfoDto> getByUsuario(HttpServletRequest request) {
-        List<MedicamentoInfoDto> medicamentos = new ArrayList<>(); 
+        List<MedicamentoInfoDto> medicamentos = new ArrayList<>();
         String usuarioCpf = jwtService.getSubjectFromRequest(request);
 
-        repository.findByUsuarioCpf(usuarioCpf).stream().forEach(medicamento -> medicamentos.add(new MedicamentoInfoDto(
+        repository.findByUsuarioCpf(usuarioCpf).forEach(medicamento -> {
+
+            List<Time> horas = doseRepository.findByMedicamentoId(medicamento.id())
+                    .stream()
+                    .map(Dose::horaPrevista)
+                    .toList();
+
+            medicamentos.add(new MedicamentoInfoDto(
                     medicamento.id(),
-                    usuarioCpf, 
-                    medicamento.nome(), 
-                    medicamento.dosagem(), 
-                    medicamento.administracao(), 
-                    medicamento.frequencia(), 
-                    medicamento.inicio(), 
-                    medicamento.termino(), 
-                    medicamento.continuo(), 
-                    medicamento.observacoes()))); 
+                    usuarioCpf,
+                    medicamento.nome(),
+                    medicamento.dosagem(),
+                    medicamento.administracao(),
+                    medicamento.frequencia(),
+                    medicamento.inicio(),
+                    medicamento.termino(),
+                    medicamento.continuo(),
+                    medicamento.observacoes(),
+                    horas
+            ));
+        });
+
         return medicamentos;
     }
 
@@ -90,7 +147,7 @@ public class MedicamentoService {
         String usuarioCpf = jwtService.getSubjectFromRequest(request);
 
         if (!medicamento.usuario().cpf().equals(usuarioCpf)) {
-            throw new RuntimeException();
+            throw new RuntimeException("Acesso negado ao medicamento.");
         }
 
         medicamento.setNome(medicamentoInfo.nome().trim());
@@ -100,21 +157,30 @@ public class MedicamentoService {
         medicamento.setInicio(medicamentoInfo.inicio());
         medicamento.setTermino(medicamentoInfo.termino());
         medicamento.setContinuo(medicamentoInfo.continuo());
-        medicamento.setObservacoes(medicamentoInfo.observacoes().trim());
+        medicamento.setObservacoes(
+            medicamentoInfo.observacoes() != null ? medicamentoInfo.observacoes().trim() : null
+        );
 
         repository.save(medicamento);
 
+        List<Time> horas = doseRepository.findByMedicamentoId(id)
+                .stream()
+                .map(Dose::horaPrevista)
+                .toList();
+
         return new MedicamentoInfoDto(
-                        id,
-                        medicamento.usuario().cpf(), 
-                        medicamento.nome(), 
-                        medicamento.dosagem(), 
-                        medicamento.administracao(), 
-                        medicamento.frequencia(), 
-                        medicamento.inicio(), 
-                        medicamento.termino(), 
-                        medicamento.continuo(), 
-                        medicamento.observacoes()); 
+                id,
+                medicamento.usuario().cpf(),
+                medicamento.nome(),
+                medicamento.dosagem(),
+                medicamento.administracao(),
+                medicamento.frequencia(),
+                medicamento.inicio(),
+                medicamento.termino(),
+                medicamento.continuo(),
+                medicamento.observacoes(),
+                horas
+        );
     }
 
     public void delete(Long id, HttpServletRequest request) {
