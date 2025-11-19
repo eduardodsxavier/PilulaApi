@@ -13,6 +13,7 @@ import com.Api.Pilula.repository.UsuarioRepository;
 import com.Api.Pilula.repository.DoseRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 
 import com.Api.Pilula.dtos.MedicamentoInfoDto;
 import com.Api.Pilula.model.Medicamento;
@@ -183,6 +184,7 @@ public class MedicamentoService {
         );
     }
 
+    @Transactional
     public void delete(Long id, HttpServletRequest request) {
         repository.deleteByIdAndUsuarioCpf(id, jwtService.getSubjectFromRequest(request));
     }

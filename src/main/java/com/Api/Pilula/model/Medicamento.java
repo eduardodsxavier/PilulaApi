@@ -2,8 +2,10 @@ package com.Api.Pilula.model;
 
 import com.Api.Pilula.enums.Administracao;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +16,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Table(name = "medicamento")
@@ -49,6 +52,9 @@ public class Medicamento {
     private boolean continuo;
 
     private String observacoes;
+
+    @OneToMany(mappedBy = "medicamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Dose> doses = new ArrayList<>();
 
     public Medicamento() {
     }
