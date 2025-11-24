@@ -20,4 +20,8 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Long> 
     @Modifying
     @Transactional
     void deleteByIdAndUsuarioCpf(long id, String usuarioCpf);
+
+    @Modifying
+    @Transactional
+    void deleteByUsuarioCpf(String usuarioCpf);
 }

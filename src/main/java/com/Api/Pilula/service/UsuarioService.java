@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.Api.Pilula.dtos.UsuarioInfoDto;
 import com.Api.Pilula.model.Usuario;
+import com.Api.Pilula.repository.MedicamentoRepository;
 import com.Api.Pilula.repository.UsuarioRepository;
 import com.Api.Pilula.security.SecurityConfig;
 
@@ -15,6 +16,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository repository;
+
+    @Autowired
+    private MedicamentoRepository medicamentoRepository;
 
     @Autowired
     private SecurityConfig securityConfig;
@@ -52,6 +56,8 @@ public class UsuarioService {
     }
 
     public void delete(HttpServletRequest request) {
-        repository.deleteById(jwtService.getSubjectFromRequest(request));
+        String cpf = jwtService.getSubjectFromRequest(request);
+        medicamentoRepository.deleteByUsuarioCpf(cpf);
+        repository.deleteById(cpf);
     }
 }
