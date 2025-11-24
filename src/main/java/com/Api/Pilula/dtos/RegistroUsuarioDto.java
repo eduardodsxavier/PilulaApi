@@ -1,8 +1,10 @@
 package com.Api.Pilula.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record RegistroUsuarioDto(
     String cpf,
     String nome,
-    String email,
+    @NotBlank String email,
     String senha
 ) {}

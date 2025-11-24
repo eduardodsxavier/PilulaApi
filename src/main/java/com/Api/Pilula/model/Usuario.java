@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Table(name = "usuario")
 @Entity
@@ -15,6 +16,7 @@ public class Usuario {
     @Column(nullable = false)
     private String nome;
 
+    @NotBlank
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -66,4 +68,5 @@ public class Usuario {
     public boolean validarSenha(String senha) {
         return senha.matches("^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z]).{8,}$");
     }
+
 }

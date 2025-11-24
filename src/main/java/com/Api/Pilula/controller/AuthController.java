@@ -10,6 +10,8 @@ import com.Api.Pilula.dtos.RegistroUsuarioDto;
 import com.Api.Pilula.dtos.AccessTokenDto;
 import com.Api.Pilula.service.AuthService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -18,9 +20,8 @@ public class AuthController {
     private AuthService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AccessTokenDto> register(@RequestBody RegistroUsuarioDto registroUsuario)  {
+    public ResponseEntity<AccessTokenDto> register(@Valid @RequestBody RegistroUsuarioDto registroUsuario) {
         AccessTokenDto accessToken = service.register(registroUsuario);
-
         return new ResponseEntity<>(new AccessTokenDto(accessToken.token()), HttpStatus.OK);
     }
 
